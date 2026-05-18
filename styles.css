@@ -1,0 +1,768 @@
+/* ================================================
+   Reset & variáveis
+   ================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #fdf9f5;
+
+  /* Envelope */
+  --env-w: min(82vw, 340px);
+  --env-color: #f7ead8;
+  --env-fold: #ecdcc5;
+  --env-flap: #f0dfc8;
+  --env-inside: #e8d4b8;
+  --env-shadow: rgba(180, 130, 80, 0.18);
+
+  /* Tipografia */
+  --font-title: 'Bitcount Grid Single', 'Courier New', monospace;
+  --font-cursive: 'Dancing Script', cursive;
+
+  /* Cores */
+  --pink: #a90000;
+  --purple: #3900a3;
+  --text: #3d2b3d;
+  --text-light: #7a5c7a;
+
+  --overlay-z: 200;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100dvh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ================================================
+   Cortina de abertura
+   ================================================ */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: flex;
+  pointer-events: none;
+}
+
+.curtain-left,
+.curtain-right {
+  width: 50%;
+  height: 100%;
+  will-change: transform;
+  transition: transform 1.9s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Textura de veludo com dobras verticais */
+.curtain-left {
+  background-color: #7a0018;
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 2px,
+      transparent 2px, transparent 10px,
+      rgba(0,0,0,0.18) 10px, rgba(0,0,0,0.18) 13px,
+      transparent 13px, transparent 24px
+    ),
+    linear-gradient(to right, #5a0010 0%, #9a0020 55%, #6e0016 100%);
+  border-right: 3px solid #c9950a;
+  box-shadow: inset -8px 0 20px rgba(0,0,0,0.35), 4px 0 16px rgba(0,0,0,0.4);
+}
+
+.curtain-right {
+  background-color: #7a0018;
+  background-image:
+    repeating-linear-gradient(
+      to left,
+      rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 2px,
+      transparent 2px, transparent 10px,
+      rgba(0,0,0,0.18) 10px, rgba(0,0,0,0.18) 13px,
+      transparent 13px, transparent 24px
+    ),
+    linear-gradient(to left, #5a0010 0%, #9a0020 55%, #6e0016 100%);
+  border-left: 3px solid #c9950a;
+  box-shadow: inset 8px 0 20px rgba(0,0,0,0.35), -4px 0 16px rgba(0,0,0,0.4);
+}
+
+.curtain.open .curtain-left  { transform: translateX(-100%); }
+.curtain.open .curtain-right { transform: translateX(100%);  }
+
+/* ── Aparição sequencial das seções ── */
+.hero,
+.envelope-area,
+.table-stickers {
+  opacity: 0;
+  transform: translateY(26px);
+  will-change: opacity, transform;
+  transition: opacity 1.0s ease, transform 1.0s ease;
+}
+
+.hero.revealed,
+.envelope-area.revealed,
+.table-stickers.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ================================================
+   Confetti de fundo
+   ================================================ */
+.confetti-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -16px;
+  border-radius: 2px;
+  will-change: transform, opacity;
+  animation: confetti-fall linear infinite;
+}
+
+@keyframes confetti-fall {
+  0%   { transform: translateY(0)     rotate(0deg);   opacity: 0.88; }
+  8%   {                                               opacity: 0.88; }
+  92%  {                                               opacity: 0.6;  }
+  100% { transform: translateY(108vh) rotate(680deg); opacity: 0;    }
+}
+
+/* ================================================
+   Página principal
+   ================================================ */
+.page {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(28px, 7vw, 52px);
+  min-height: 100dvh;
+  padding: 100px 16px 32px;
+}
+
+/* ================================================
+   Título
+   ================================================ */
+.hero { text-align: center; }
+
+.hero h1 {
+    margin-bottom: 20px;
+}
+
+.hero-title {
+  font-family: var(--font-title);
+  font-size: clamp(2rem, 11vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #a90000 0%, #f200ff 40%, #e2fe11 80%, #818181 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-name {
+  font-family: var(--font-cursive);
+  font-size: clamp(1.5rem, 7vw, 2.4rem);
+  font-weight: 600;
+  color: var(--pink);
+  margin-top: 6px;
+}
+
+/* ================================================
+   Envelope
+   ================================================ */
+.envelope-area {
+  display: flex;
+  justify-content: center;
+}
+
+.envelope {
+  width: var(--env-w);
+  aspect-ratio: 7 / 5;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 8px;
+  filter: drop-shadow(0 10px 28px var(--env-shadow));
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.envelope:hover  { transform: translateY(-5px) scale(1.01); }
+.envelope:active { transform: scale(0.97); }
+
+/* Fundo interno do envelope */
+.env-inside {
+  position: absolute;
+  inset: 0;
+  background: var(--env-inside);
+  border-radius: 8px;
+  z-index: 1;
+}
+
+/* Corpo */
+.env-body {
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 2;
+  background: var(--env-color);
+}
+
+/* Dobras decorativas */
+.env-fold { position: absolute; background: var(--env-fold); }
+
+.env-fold-left {
+  top: 0; left: 0;
+  width: 50%; height: 100%;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.env-fold-right {
+  top: 0; right: 0;
+  width: 50%; height: 100%;
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+
+.env-fold-bottom {
+  bottom: 0; left: 0;
+  width: 100%; height: 55%;
+  background: color-mix(in srgb, var(--env-fold) 80%, #fff);
+  clip-path: polygon(0 100%, 50% 0, 100% 100%);
+}
+
+/* Centro: lacre + dica */
+.env-center {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.env-seal {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--pink), #d4709e);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(232, 160, 180, 0.55);
+}
+
+.env-hint {
+  font-family: var(--font-cursive);
+  font-size: 0.85rem;
+  color: #9e7a5a;
+  text-align: center;
+}
+
+/* Lacre triangular animado */
+.env-flap {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 55%;
+  background: var(--env-flap);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  border-radius: 8px 8px 0 0;
+  transform-origin: top center;
+  transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  backface-visibility: hidden;
+}
+
+.envelope.open .env-flap {
+  transform: perspective(700px) rotateX(-180deg);
+}
+
+/* ================================================
+   Overlay da carta
+   ================================================ */
+.letter-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--overlay-z);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.letter-overlay.visible { pointer-events: all; }
+
+.overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(61, 43, 61, 0.38);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.letter-overlay.visible .overlay-backdrop { opacity: 1; }
+
+.letter-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  height: 88dvh;
+  padding: 0 12px 12px;
+  transform: translateY(100%);
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.letter-overlay.visible .letter-wrapper { transform: translateY(-60px); }
+
+/* Botão fechar — invisível até a carta estar aberta */
+.close-btn {
+  position: absolute;
+  top: -44px;
+  right: 20px;
+  width: 38px;
+  height: 38px;
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 15px;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.18);
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.2s ease;
+}
+
+/* Aparece somente quando o overlay está visível */
+.letter-overlay.visible .close-btn {
+  opacity: 1;
+  pointer-events: all;
+  transition-delay: 0.45s; /* aguarda o slide-up terminar */
+}
+
+.close-btn:hover { transform: scale(1.12) rotate(10deg); }
+
+/* Pilha de papéis */
+.paper-stack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.paper-shadow {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px 20px 0 0;
+}
+
+.paper-shadow--back {
+  transform: rotate(-2.5deg) translateY(6px);
+  background: #f4e8d8;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.07);
+  z-index: 0;
+}
+
+.paper-shadow--mid {
+  transform: rotate(1.5deg) translateY(3px);
+  background: #faf2e8;
+  box-shadow: 0 -4px 14px rgba(0,0,0,0.06);
+  z-index: 1;
+}
+
+/* Swiper */
+.letter-swiper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px 20px 0 0;
+  background: #fffaf6;
+  box-shadow: 0 -6px 32px rgba(0,0,0,0.13);
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* ================================================
+   Slides
+   ================================================ */
+.swiper-slide {
+  height: 100%;
+  overflow: hidden;
+}
+
+.letter-sheet {
+  width: 100%;
+  height: 100%;
+  background: #fffaf6;
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 36px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #e8cfc0 transparent;
+}
+
+/* Linhas de caderno no slide 1 */
+.letter-sheet:first-of-type .sheet-scroll {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 31px,
+    #f0dfd4 31px,
+    #f0dfd4 32px
+  );
+  background-attachment: local;
+}
+
+.letter-text {
+  font-family: var(--font-cursive);
+  font-size: clamp(1rem, 4.2vw, 1.18rem);
+  line-height: 2rem;
+  color: var(--text);
+  flex: 1;
+}
+
+.swipe-hint {
+  font-size: 0.72rem;
+  color: #c0a898;
+  text-align: center;
+  font-family: sans-serif;
+  letter-spacing: 0.03em;
+}
+
+.slide-heading {
+  font-family: var(--font-cursive);
+  font-size: clamp(1.1rem, 5vw, 1.4rem);
+  color: var(--purple);
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ── Título fixo do slide de fotos ── */
+.photo-slide-title {
+  font-family: var(--font-cursive);
+  font-size: 22px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--purple);
+  text-align: center;
+  padding: 18px 24px 14px;
+  border-bottom: 1px dashed #deccb8;
+  line-height: 1.5;
+  flex-shrink: 0;
+}
+
+/* ── Slide de frases ── */
+.phrases-scroll {
+  gap: 14px;
+}
+
+.phrases-intro {
+  font-family: var(--font-cursive);
+  font-size: 22px;
+  color: #2d2925;
+  text-align: center;
+  font-style: italic;
+}
+
+.phrases-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.phrase-card {
+  font-family: var(--font-cursive);
+  font-size: clamp(0.95rem, 3.8vw, 1.08rem);
+  font-weight: 600;
+  font-style: italic;
+  padding: 13px 16px;
+  border-radius: 10px;
+  box-shadow: 2px 3px 10px rgba(0,0,0,0.07);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Cada nota com cor e inclinação própria */
+.pc-a {
+  background: #fffde7;
+  border-left: 4px solid #f9a825;
+  color: #5d4037;
+  transform: rotate(-1.2deg);
+  font-size: clamp(1rem, 4vw, 1.12rem); /* leve destaque para a citação mais longa */
+}
+.pc-b {
+  background: #e3f2fd;
+  border-left: 4px solid #42a5f5;
+  color: #1565c0;
+  transform: rotate(1.8deg);
+}
+.pc-c {
+  background: #fce4ec;
+  border-left: 4px solid #f06292;
+  color: #880e4f;
+  transform: rotate(-0.7deg);
+}
+.pc-d {
+  background: #f3e5f5;
+  border-left: 4px solid #ab47bc;
+  color: #4a148c;
+  transform: rotate(1.5deg);
+}
+.pc-e {
+  background: #e8f5e9;
+  border-left: 4px solid #66bb6a;
+  color: #1b5e20;
+  transform: rotate(-1.8deg);
+}
+
+/* Fotos */
+.photos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.photo-link {
+  display: block;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+
+.photo {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f5e0d0 0%, #fce4ec 100%);
+  min-height: 80px;
+  display: block;
+}
+
+/* Slide final */
+.letter-sheet--final {
+  background: linear-gradient(165deg, #ffffff 0%, #c2c2c2 60%, #fff5fb 100%);
+}
+
+.sheet-scroll--final {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 18px;
+  overflow: hidden;
+}
+
+.final-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.7rem, 9vw, 2.6rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #a90000 0%, #f200ff 40%, #e2fe11 80%, #818181 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.final-sub {
+  font-family: var(--font-cursive);
+  font-size: clamp(1rem, 4.5vw, 1.25rem);
+  color: var(--pink);
+  font-weight: 600;
+}
+
+/* ── Container dos adesivos (última página) ── */
+.stickers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  max-width: min(88vw, 296px); /* força ~3 por linha */
+  padding: 4px 0;
+}
+
+.sticker {
+  max-width: min(27vw, 84px);
+  max-height: 110px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(2px 4px 7px rgba(0,0,0,0.18));
+  flex-shrink: 0;
+}
+
+/* ── Keyframes dos stickers da carta (9 ao todo) ── */
+@keyframes float-sa {
+  0%, 100% { transform: rotate(-7deg)  translateY(0px)    scale(1);    }
+  30%       { transform: rotate(-9deg)  translateY(-8px)   scale(1.04); }
+  70%       { transform: rotate(-5deg)  translateY(-3px)   scale(0.97); }
+}
+@keyframes float-sb {
+  0%, 100% { transform: rotate(14deg)  translateY(0px)    scale(1);    }
+  40%       { transform: rotate(16deg)  translateY(-7px)   scale(1.03); }
+}
+@keyframes float-sc {
+  0%, 100% { transform: rotate(-3deg)  translateY(0px)    scale(1);    }
+  35%       { transform: rotate(-5deg)  translateY(-9px)   scale(1.02); }
+  65%       { transform: rotate(-2deg)  translateY(-5px)   scale(0.99); }
+}
+@keyframes float-sd {
+  0%, 100% { transform: rotate(8deg)   translateY(0px)    scale(1);    }
+  50%       { transform: rotate(10deg)  translateY(-8px)   scale(1.03); }
+}
+@keyframes float-se {
+  0%, 100% { transform: rotate(-11deg) translateY(0px)    scale(1);    }
+  45%       { transform: rotate(-13deg) translateY(-9px)   scale(1.04); }
+  80%       { transform: rotate(-9deg)  translateY(-4px)   scale(0.98); }
+}
+@keyframes float-sf {
+  0%, 100% { transform: rotate(5deg)   translateY(0px)    scale(1);    }
+  30%       { transform: rotate(7deg)   translateY(-6px)   scale(1.02); }
+}
+@keyframes float-sg {
+  0%, 100% { transform: rotate(-17deg) translateY(0px)    scale(1);    }
+  50%       { transform: rotate(-17deg) translateY(-10px)  scale(1.04); }
+}
+@keyframes float-sh {
+  0%, 100% { transform: rotate(20deg)  translateY(0px)    scale(1);    }
+  40%       { transform: rotate(22deg)  translateY(-7px)   scale(1.03); }
+}
+@keyframes float-si {
+  0%, 100% { transform: rotate(-4deg)  translateY(0px)    scale(1);    }
+  55%       { transform: rotate(-6deg)  translateY(-8px)   scale(1.02); }
+  80%       { transform: rotate(-3deg)  translateY(-4px)   scale(0.99); }
+}
+
+/* Cada sticker com rotação base embutida no keyframe + timing escalonado */
+.sticker--a { animation: float-sa 3.0s ease-in-out infinite;        }
+.sticker--b { animation: float-sb 2.6s ease-in-out infinite 0.3s;   }
+.sticker--c { animation: float-sc 3.4s ease-in-out infinite 0.7s;   }
+.sticker--d { animation: float-sd 2.9s ease-in-out infinite 1.1s;   }
+.sticker--e { animation: float-se 3.6s ease-in-out infinite 0.5s;   }
+.sticker--f { animation: float-sf 3.1s ease-in-out infinite 0.9s;   }
+.sticker--g { animation: float-sg 2.8s ease-in-out infinite 1.4s;   }
+.sticker--h { animation: float-sh 3.3s ease-in-out infinite 0.2s;   }
+.sticker--i { animation: float-si 3.7s ease-in-out infinite 1.6s;   }
+
+/* ── Stickers espalhados na "mesa" (9 em 2 fileiras) ── */
+.table-stickers {
+  position: relative;
+  width: min(96vw, 400px);
+  height: 100px;   /* fileira 1; fileira 2 ultrapassa com overflow:visible */
+  overflow: visible;
+}
+
+.table-sticker {
+  position: absolute;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(2px 5px 9px rgba(0,0,0,0.15));
+}
+
+/* ── Keyframes da mesa (9 ao todo) ── */
+@keyframes float-ta { 0%,100%{transform:rotate(-17deg) translateY(0)}   50%{transform:rotate(-17deg) translateY(-5px)} }
+@keyframes float-tb { 0%,100%{transform:rotate(22deg)  translateY(0)}   50%{transform:rotate(22deg)  translateY(-7px)} }
+@keyframes float-tc { 0%,100%{transform:rotate(-7deg)  translateY(0)}   50%{transform:rotate(-7deg)  translateY(-4px)} }
+@keyframes float-td { 0%,100%{transform:rotate(30deg)  translateY(0)}   50%{transform:rotate(30deg)  translateY(-6px)} }
+@keyframes float-te { 0%,100%{transform:rotate(-20deg) translateY(0)}   50%{transform:rotate(-20deg) translateY(-5px)} }
+@keyframes float-tf { 0%,100%{transform:rotate(25deg)  translateY(0)}   50%{transform:rotate(25deg)  translateY(-6px)} }
+@keyframes float-tg { 0%,100%{transform:rotate(-12deg) translateY(0)}   50%{transform:rotate(-12deg) translateY(-7px)} }
+@keyframes float-th { 0%,100%{transform:rotate(18deg)  translateY(0)}   50%{transform:rotate(18deg)  translateY(-4px)} }
+@keyframes float-ti { 0%,100%{transform:rotate(-28deg) translateY(0)}   50%{transform:rotate(-28deg) translateY(-6px)} }
+
+/* Fileira 1 (5 stickers) — esticados pelo container */
+.ts-a { left:  0%;  top: 22px; height: 62px; animation: float-ta 3.8s ease-in-out infinite;       }
+.ts-b { left: 17%;  top:  8px; height: 68px; animation: float-tb 3.2s ease-in-out infinite 0.4s;  }
+.ts-c { left: 36%;  top: 26px; height: 60px; animation: float-tc 4.1s ease-in-out infinite 0.9s;  }
+.ts-d { left: 54%;  top: 10px; height: 64px; animation: float-td 3.5s ease-in-out infinite 1.3s;  }
+.ts-e { left: 73%;  top: 20px; height: 70px; animation: float-te 3.9s ease-in-out infinite 0.6s;  }
+
+/* Fileira 2 (4 stickers) — ligeiramente abaixo, usando overflow:visible */
+.ts-f { left:  5%;  top: 92px; height: 62px; animation: float-tf 3.3s ease-in-out infinite 0.2s;  }
+.ts-g { left: 26%;  top: 80px; height: 67px; animation: float-tg 4.0s ease-in-out infinite 0.8s;  }
+.ts-h { left: 51%;  top: 96px; height: 60px; animation: float-th 3.6s ease-in-out infinite 1.1s;  }
+.ts-i { left: 70%;  top: 84px; height: 65px; animation: float-ti 3.4s ease-in-out infinite 1.5s;  }
+
+/* ================================================
+   Paginação vertical (lado direito)
+   ================================================ */
+.letter-swiper .swiper-pagination {
+  right: 10px !important;
+  left: auto !important;
+  width: auto !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.letter-swiper .swiper-pagination-bullet {
+  background: var(--pink);
+  opacity: 0.4;
+  width: 7px;
+  height: 7px;
+  margin: 0 !important;
+}
+
+.letter-swiper .swiper-pagination-bullet-active {
+  opacity: 1;
+  background: var(--purple);
+  height: 16px;
+  border-radius: 4px;
+}
+
+/* ================================================
+   Responsivo
+   ================================================ */
+@media (min-width: 420px) {
+  .letter-wrapper { height: 82dvh; }
+}
+
+@media (min-width: 600px) {
+  .letter-wrapper { height: 78dvh; }
+  .env-hint { font-size: 0.95rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti-piece   { animation: none; opacity: 0.5; }
+  .env-flap         { transition: none; }
+  .letter-wrapper   { transition: none; }
+  .overlay-backdrop { transition: none; }
+}

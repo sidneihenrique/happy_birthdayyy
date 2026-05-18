@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Feliz Aniversário, Milena!</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bitcount+Grid+Single:ital,wght@0,100..900;1,100..900&family=Dancing+Script:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5/dist/fancybox/fancybox.css"/>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Cortina de abertura -->
+  <div class="curtain" id="curtain" aria-hidden="true">
+    <div class="curtain-left"></div>
+    <div class="curtain-right"></div>
+  </div>
+
+  <!-- Confetti animado de fundo -->
+  <div class="confetti-bg" id="confettiBg" aria-hidden="true"></div>
+
+  <!-- Página principal -->
+  <main class="page">
+    <header class="hero">
+      <h1>🎂 🎉</h1>
+      <h1 class="hero-title">Feliz<br>Aniversário</h1>
+      <p class="hero-name">Milena</p>
+    </header>
+
+    <div class="envelope-area">
+      <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Abrir carta de aniversário">
+        <!-- Fundo interno do envelope (visível quando o lacre abre) -->
+        <div class="env-inside"></div>
+
+        <!-- Corpo do envelope com dobras decorativas -->
+        <div class="env-body">
+          <div class="env-fold env-fold-left"></div>
+          <div class="env-fold env-fold-right"></div>
+          <div class="env-fold env-fold-bottom"></div>
+          <div class="env-center">
+            <div class="env-seal" aria-hidden="true">❤</div>
+            <p class="env-hint">toque para abrir 💌</p>
+          </div>
+        </div>
+
+        <!-- Lacre triangular (animado ao abrir) -->
+        <div class="env-flap" id="envFlap" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <!-- Stickers espalhados como numa mesa, abaixo do envelope -->
+    <div class="table-stickers" aria-hidden="true">
+      <img src="./assets/stickers/snoopy 2.png"          alt="" class="table-sticker ts-a">
+      <img src="./assets/stickers/emoji_beijo.png"        alt="" class="table-sticker ts-b">
+      <img src="./assets/stickers/nuquidito.png"          alt="" class="table-sticker ts-c">
+      <img src="./assets/stickers/i_love_my_ficante.png"  alt="" class="table-sticker ts-d">
+      <img src="./assets/stickers/snoopy_enfermeiro.png"  alt="" class="table-sticker ts-e">
+      <img src="./assets/stickers/febre-logo.png"         alt="" class="table-sticker ts-f">
+      <img src="./assets/stickers/emoji_champagne.png"    alt="" class="table-sticker ts-g">
+      <img src="./assets/stickers/cachorro_tadinho.png"   alt="" class="table-sticker ts-h">
+      <img src="./assets/stickers/davi_brito.png"         alt="" class="table-sticker ts-i">
+    </div>
+
+  </main>
+
+  <!-- Overlay da carta (oculto até clicar no envelope) -->
+  <div class="letter-overlay" id="letterOverlay" aria-hidden="true">
+    <div class="overlay-backdrop" id="overlayBackdrop"></div>
+
+    <div class="letter-wrapper">
+      <button class="close-btn" id="closeBtn" aria-label="Fechar carta">✕</button>
+
+      <!-- Efeito de pilha de papel -->
+      <div class="paper-stack">
+        <div class="paper-shadow paper-shadow--back"></div>
+        <div class="paper-shadow paper-shadow--mid"></div>
+
+        <!-- Swiper vertical -->
+        <div class="swiper letter-swiper" id="letterSwiper">
+          <div class="swiper-wrapper">
+
+            <!-- Slide 1 — Carta de texto -->
+            <div class="swiper-slide">
+              <article class="letter-sheet">
+                <div class="sheet-scroll">
+                  <p class="letter-text">
+                    Omggg feliz aniversário meu amor!! <br> <br>Você é uma pessoa incrível de verdade e espero que tenha noção disso, sempre te enxergo com uma capacidade enorme e sei que você vai realizar tudo que almeja (seu futuro é brilhante e eu posso provar kkkkkkkk). <br><br>
+                    Eu sempre agradeço muito por ter conhecido você aqui nesse plano, você sempre me traz muitos ensinamentos e eu sinto que você não só divide coisas, momentos e conversas comigo, sinto que você enriquece minha alma. Obrigado. <br> <br>
+                    Talvez você nem tenha essa noção mas eu enxergo toda energia que você deposita nas suas coisas e eu tenho certeza que isso sempre toca alguém de alguma maneira, até porque acredito que isso é do seu natural. <br><br>
+                    Você ta sempre plantando coisas boas e as vezes você não faz a colheita dessas coisas boas mas outras pessoas fazem e é isso que faz a diferença de verdade, não sei qual seu propósito de vida ainda mas eu sei que o que tem feito já é muito bonito, obrigado por me fazer enxergar tantas coisas bonitas desse mundo, feliz aniversário diva querida!! kkkkkkkkkkk
+                  </p>
+                  <p class="swipe-hint">↓ deslize para ver mais ↓</p>
+                </div>
+              </article>
+            </div>
+
+            <!-- Slide 2 — Fotos -->
+            <div class="swiper-slide">
+              <article class="letter-sheet">
+                <h2 class="photo-slide-title">Obrigado por sempre enriquecer minha alma</h2>
+                <div class="sheet-scroll">
+                  <div class="photos-grid">
+                    <a href="./assets/images/milena_1.jpeg" data-fancybox="photos" class="photo-link"><img src="./assets/images/milena_1.jpeg" alt="" class="photo"></a>
+                    <a href="./assets/images/milena_2.jpeg" data-fancybox="photos" class="photo-link"><img src="./assets/images/milena_2.jpeg" alt="" class="photo"></a>
+                    <a href="./assets/images/milena_3.png"  data-fancybox="photos" class="photo-link"><img src="./assets/images/milena_3.png"  alt="" class="photo"></a>
+                    <a href="./assets/images/imagem_1.jpeg" data-fancybox="photos" class="photo-link"><img src="./assets/images/imagem_1.jpeg" alt="" class="photo"></a>
+                    <a href="./assets/images/imagem_2.jpeg" data-fancybox="photos" class="photo-link"></a>
+                    <a href="./assets/images/imagem_3.jpeg" data-fancybox="photos" class="photo-link"></a>
+                    <a href="./assets/images/imagem_4.jpeg" data-fancybox="photos" class="photo-link"></a>
+                    <a href="./assets/images/imagem_5.jpeg" data-fancybox="photos" class="photo-link"></a>
+                    <a href="./assets/images/imagem_6.jpeg" data-fancybox="photos" class="photo-link"></a>
+                    <a href="./assets/images/imagem_7.jpeg" data-fancybox="photos" class="photo-link"></a>
+                    <a href="./assets/images/imagem_8.jpeg" data-fancybox="photos" class="photo-link"></a>
+                    <a href="./assets/images/imagem_9.jpeg" data-fancybox="photos" class="photo-link"></a>
+                    <a href="./assets/images/imagem_10.jpeg" data-fancybox="photos" class="photo-link"></a>
+                  </div>
+                  <p class="swipe-hint">↓ não acabou ainda ↓</p>
+                </div>
+              </article>
+            </div>
+
+            <!-- Slide 3 — Frases dela -->
+            <div class="swiper-slide">
+              <article class="letter-sheet">
+                <div class="sheet-scroll phrases-scroll">
+                  <p class="phrases-intro">Suas frases de efeito</p>
+                  <div class="phrases-grid">
+
+                    <blockquote class="phrase-card pc-a">
+                      "tudo vale a pena quando a alma não é pequena"
+                    </blockquote>
+
+                    <div class="phrase-card pc-b">"eu vi no tiktok ☝️"</div>
+
+                    <div class="phrase-card pc-c">"você tem que ver!!"</div>
+
+                    <div class="phrase-card pc-d">"divo querido"</div>
+
+                    <div class="phrase-card pc-e">"não meus amores"</div>
+                    
+                    <div class="phrase-card pc-a">"oi você pode fala?"</div>
+
+                  </div>
+                  <p class="swipe-hint">↓ só mais uma ↓</p>
+                </div>
+              </article>
+            </div>
+
+            <!-- Slide 4 (Final) — Mensagem final + adesivos -->
+            <div class="swiper-slide">
+              <article class="letter-sheet letter-sheet--final">
+                <div class="sheet-scroll sheet-scroll--final">
+                  <h2 class="final-title">Feliz<br>Aniversário!</h2>
+                  <p class="final-sub">Espero que seu dia seja incrível igual você tem sido todos os dias pra mim ❤️</p>
+                  <div class="stickers">
+                    <img src="./assets/stickers/snoopy 2.png"         alt="" class="sticker sticker--a">
+                    <img src="./assets/stickers/emoji_beijo.png"       alt="" class="sticker sticker--b">
+                    <img src="./assets/stickers/nuquidito.png"         alt="" class="sticker sticker--c">
+                    <img src="./assets/stickers/febre-logo.png"        alt="" class="sticker sticker--d">
+                    <img src="./assets/stickers/snoopy_enfermeiro.png" alt="" class="sticker sticker--e">
+                    <img src="./assets/stickers/emoji_champagne.png"   alt="" class="sticker sticker--f">
+                    <img src="./assets/stickers/i_love_my_ficante.png" alt="" class="sticker sticker--g">
+                    <img src="./assets/stickers/cachorro_tadinho.png"  alt="" class="sticker sticker--h">
+                    <img src="./assets/stickers/davi_brito.png"        alt="" class="sticker sticker--i">
+                  </div>
+                </div>
+              </article>
+            </div>
+
+          </div>
+
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Música de fundo -->
+  <audio id="bgMusic" loop preload="none">
+    <source src="assets/saudade_do_mar.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5/dist/fancybox/fancybox.umd.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
