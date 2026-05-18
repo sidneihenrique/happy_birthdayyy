@@ -53,6 +53,32 @@ let opened = false;
 /* ================================================
    Swiper (inicializado ao abrir)
    ================================================ */
+function setupScrollLock() {
+  document.querySelectorAll('.sheet-scroll').forEach(scrollEl => {
+    let startY = 0;
+
+    scrollEl.addEventListener('touchstart', (e) => {
+      startY = e.touches[0].clientY;
+    }, { passive: true });
+
+    scrollEl.addEventListener('touchmove', (e) => {
+      if (!swiper) return;
+      const isScrollable = scrollEl.scrollHeight > scrollEl.clientHeight + 2;
+      if (!isScrollable) { swiper.allowTouchMove = true; return; }
+
+      const dy       = e.touches[0].clientY - startY;
+      const atTop    = scrollEl.scrollTop <= 3;
+      const atBottom = scrollEl.scrollTop + scrollEl.clientHeight >= scrollEl.scrollHeight - 3;
+
+      swiper.allowTouchMove = !((dy < 0 && !atBottom) || (dy > 0 && !atTop));
+    }, { passive: true });
+
+    scrollEl.addEventListener('touchend', () => {
+      setTimeout(() => { if (swiper) swiper.allowTouchMove = true; }, 200);
+    }, { passive: true });
+  });
+}
+
 function initSwiper() {
   if (swiper) return;
   swiper = new Swiper('#letterSwiper', {
@@ -69,6 +95,7 @@ function initSwiper() {
       nextSlideMessage: 'Próxima página',
     },
   });
+  setupScrollLock();
 }
 
 /* ================================================

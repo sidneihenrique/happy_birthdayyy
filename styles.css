@@ -335,7 +335,7 @@ body {
   z-index: 1;
 }
 
-.letter-overlay.visible .letter-wrapper { transform: translateY(-60px); }
+.letter-overlay.visible .letter-wrapper { transform: translateY(-32px); }
 
 /* Botão fechar — invisível até a carta estar aberta */
 .close-btn {
